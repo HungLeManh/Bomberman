@@ -2,6 +2,7 @@ package uet.oop.bomberman;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -11,6 +12,8 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.bomb.Bomb;
+import uet.oop.bomberman.entities.bomb.Flame;
 import uet.oop.bomberman.entities.characters.Bomber;
 import uet.oop.bomberman.entities.characters.enemies.Balloon;
 import uet.oop.bomberman.entities.characters.enemies.Enemy;
@@ -44,7 +47,6 @@ public class BombermanGame extends Application {
     private int flameRadius = 1;
 
     public static void main(String[] args) {
-
         Application.launch(BombermanGame.class);
     }
 
@@ -79,9 +81,6 @@ public class BombermanGame extends Application {
 
         createMap();
 
-        bomberman = new Bomber(1, 1, Sprite.player_down.getFxImage());
-        entities.add(bomberman);
-
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -101,7 +100,7 @@ public class BombermanGame extends Application {
     }
 
     public void createMap() {
-        board = new Board(WIDTH, HEIGHT);
+        board = new Board(entities, stillObjects);
         for (int i = 0; i < HEIGHT; i++) {
             for (int j = 0; j < WIDTH; j++) {
                 Entity object;
@@ -112,61 +111,50 @@ public class BombermanGame extends Application {
                     case '#':
                         object = new Wall(j, i, Sprite.wall.getFxImage());
                         stillObjects.add(object);
-                        board.cell[i][j] = board.wall;
                         break;
                     case '*':
-                        object = new Brick(j, i, brickImg);
-                        stillObjects.add(object);
-                        board.cell[i][j] = board.brick;
+                        object = new Brick(j, i, brickImg, board);
+                        entities.add(object);
                         break;
                     case 'x':
-                        //stillObjects.add(new Grass(j, i, grassImg));
-                        object = new Portal(j, i, Sprite.portal.getFxImage());
-                        stillObjects.add(object);
-                        stillObjects.add(new Brick(j, i, brickImg));
-                        board.cell[i][j] = board.brick;
+                        object = new LayeredEntity (j, i, new Grass(j, i, grassImg),
+                                new Portal(j, i, Sprite.portal.getFxImage()), new Brick(j, i, brickImg, board));
+                        entities.add(object);
                         break;
                     case '1':
                         stillObjects.add(new Grass(j, i, grassImg));
-                        object = new Balloon(j, i, Sprite.balloon_left1.getFxImage());
+                        object = new Balloon(j, i, Sprite.balloon_left1.getFxImage(), board);
                         entities.add(object);
-                        board.cell[i][j] = board.enemy;
                         break;
                     case '2':
                         stillObjects.add(new Grass(j, i, grassImg));
-                        object = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
+                        object = new Oneal(j, i, Sprite.oneal_left1.getFxImage(), board);
                         entities.add(object);
-                        board.cell[i][j] = board.enemy;
                         break;
                     case 'b':
-                        //stillObjects.add(new Grass(j, i, grassImg));
-                        object = new BombItem(j, i, Sprite.powerup_bombs.getFxImage());
-                        stillObjects.add(object);
-                        stillObjects.add(new Brick(j, i, brickImg));
-                        board.cell[i][j] = board.brick;
+
+                        object = new LayeredEntity (j, i, new Grass(j, i, grassImg),
+                                new BombItem(j, i, Sprite.powerup_bombs.getFxImage()), new Brick(j, i, brickImg, board));
+                        entities.add(object);
                         break;
                     case 'f':
-                        //stillObjects.add(new Grass(j, i, grassImg));
-                        object = new FlameItem(j, i, Sprite.powerup_flames.getFxImage());
-                        stillObjects.add(object);
-                        stillObjects.add(new Brick(j, i, brickImg));
-                        board.cell[i][j] = board.brick;
+                        object = new LayeredEntity (j, i, new Grass(j, i, grassImg),
+                                new FlameItem(j, i, Sprite.powerup_flames.getFxImage()), new Brick(j, i, brickImg, board));
+                        entities.add(object);
                         break;
                     case 's':
-                        //stillObjects.add(new Grass(j, i, grassImg));
-                        object = new SpeedItem(j, i, Sprite.powerup_speed.getFxImage());
-                        stillObjects.add(object);
-                        stillObjects.add(new Brick(j, i, brickImg));
-                        board.cell[i][j] = board.brick;
-                        break;
-                    /*case 'p':
-                        object = new Bomber(j, i, Sprite.player_right.getFxImage());
+                        object = new LayeredEntity (j, i, new Grass(j, i, grassImg),
+                                new SpeedItem(j, i, Sprite.powerup_speed.getFxImage()), new Brick(j, i, brickImg, board));
                         entities.add(object);
-                        break;*/
+                        break;
+                    case 'p':
+                        bomberman = new Bomber(j, i, Sprite.player_right.getFxImage(), board);
+                        entities.add(bomberman);
+                        stillObjects.add(new Grass(j, i, grassImg));
+                        break;
                     default:
                         object = new Grass(j, i, grassImg);
                         stillObjects.add(object);
-                        board.cell[i][j] = board.grass;
                 }
             }
         }
@@ -180,6 +168,7 @@ public class BombermanGame extends Application {
             if (bomb.getTimeToExplode() == 0) {
                 entities.addAll(bomb.getFlameList());
             }
+
             if (bomb.isExploded()) {
                 entities.remove(bomb);
                 bomberman.getBombList().remove(bomb);
@@ -188,27 +177,31 @@ public class BombermanGame extends Application {
         }
 
         for (int i = 0; i < entities.size(); i++) {
-            if (entities.get(i) instanceof Flame) {
+            /*if (entities.get(i) instanceof Flame) {
                 Flame f = (Flame) entities.get(i);
                 if (f.getShowTime() == 0) {
                     while (entities.get(i) instanceof Flame) {
                         entities.remove(i);
                         if (i == entities.size()) {
+                            i--;
                             break;
                         }
                     }
                 }
-                break;
+            }*/
+            if (entities.get(i).isRemoved()) {
+                entities.remove(i);
             }
+
         }
 
-        if (!bomberman.isAlive()) {
+        /*if (!bomberman.isAlive()) {
             for (int i = 0; i < entities.size(); i++) {
                 if (entities.get(i).equals(bomberman)) {
                     entities.remove(i);
                 }
             }
-        }
+        }*/
 
     }
 

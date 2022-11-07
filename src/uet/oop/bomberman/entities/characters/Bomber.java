@@ -3,7 +3,7 @@ package uet.oop.bomberman.entities.characters;
 
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
-import uet.oop.bomberman.entities.Bomb;
+import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.characters.enemies.Enemy;
 import uet.oop.bomberman.entities.items.Item;
@@ -20,32 +20,33 @@ public class Bomber extends Character {
     private KeyEvent inputDir = null;
     private int animate = 0;
 
-    private int killTime = 90;
+    private int killTime = 75;
     private boolean bombPass = false;
 
-    public Bomber(int x, int y, Image img) {
-        super( x, y, img);
+    public Bomber(int x, int y, Image img, Board board) {
+        super( x, y, img, board);
         spriteMove = new Sprite[]{Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2,
-                                    Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2,
-                                    Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2,
-                                    Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2};
+                Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2,
+                Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2,
+                Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2};
+        spriteDead = new Sprite[]{Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3};
         speed = 8;
     }
 
     @Override
     public void update() {
-        if (!alive) {
+        if (alive) {
+            if (inputDir != null) {
+                calculateMove();
+                move(24, 32);
+                inputDir = null;
+            }
+            collide(board.getEntityAt(getXUnit(), getYUnit()));
+        } else if (killTime > 0) {
+            afterKill();
+        } else {
+            removed = true;
         }
-
-        if (inputDir != null) {
-            calculateMove();
-            move(24, 32, spriteMove);
-            inputDir = null;
-        }
-        if (Board.cell[getYUnit()][getXUnit()] == '0' || Board.cell[getYUnit()][getXUnit()] == 'f') {
-            kill();
-        }
-
     }
 
     public void calculateMove() {
@@ -69,70 +70,20 @@ public class Bomber extends Character {
         }
     }
 
-    /*public boolean canMove(int xUnit, int yUnit) {
+    public boolean canMove(int xUnit, int yUnit) {
         if (bombPass) {
             bombPass = false;
             return true;
         }
         return super.canMove(xUnit, yUnit);
-    }*/
-
-    public void move() {
-        if (animate == 99999) {
-            animate = 0;
-        }
-        int ss = Sprite.SCALED_SIZE;
-        switch (direction) {
-            case up:
-                if (x % ss != 0) {
-                    x = getXUnit() * ss;
-                }
-                if (canMove(getXUnit(), (y - speed) / ss)) {
-                    y -= speed;
-                }
-                img = Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2,
-                        animate++, 3).getFxImage();
-                break;
-            case down:
-                if (x % ss != 0) {
-                    x = getXUnit() * ss;
-                }
-                if (canMove(getXUnit(), (y + 32) / ss)) {
-                    y += speed;
-                }
-                img = Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2,
-                        animate++, 3).getFxImage();
-                break;
-            case left:
-                if (y % ss != 0) {
-                    y = getYUnit() * ss;
-                }
-                if (canMove((x - speed) / ss, getYUnit())) {
-                    x -= speed;
-                }
-                img = Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2,
-                        animate++, 3).getFxImage();
-                break;
-            case right:
-                if (y % ss != 0) {
-                    y = getYUnit() * ss;
-                }
-                if (canMove((x + 24 + speed) / ss, getYUnit())) {
-                    x += speed;
-                }
-                img = Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2,
-                        animate++, 3).getFxImage();
-                break;
-            default:
-        }
     }
 
 
     public void placeBomb() {
-        Bomb bomb = new Bomb(getXUnit(), getYUnit(), Sprite.bomb.getFxImage());
+        Bomb bomb = new Bomb(getXUnit(), getYUnit(), Sprite.bomb.getFxImage(), board);
         bombList.add(bomb);
         bombPass = true;
-        Board.cell[getYUnit()][getXUnit()] = 'b';
+        //Board.cell[getYUnit()][getXUnit()] = 'b';
     }
 
     public List<Bomb> getBombList() {
@@ -145,26 +96,33 @@ public class Bomber extends Character {
             kill();
             return false;
         }
+        if (e instanceof Bomber) {
+            return true;
+        }
         return super.collide(e);
     }
 
     @Override
     public void kill() {
+        alive = false;
+    }
+
+    public void afterKill() {
         switch (killTime) {
-            case 90:
-                img = Sprite.brick_exploded.getFxImage();
+            case 75:
+                img = spriteDead[0].getFxImage();
                 killTime--;
                 break;
-            case 60:
-                img = Sprite.brick_exploded1.getFxImage();
+            case 50:
+                img = spriteDead[1].getFxImage();
                 killTime--;
                 break;
-            case 30:
-                img = Sprite.brick_exploded2.getFxImage();
+            case 25:
+                img = spriteDead[2].getFxImage();
                 killTime--;
                 break;
             case 0:
-                return;
+                break;
             default:
                 killTime--;
         }
