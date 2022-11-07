@@ -18,6 +18,9 @@ public class Flame extends Entity {
 
     @Override
     public boolean collide(Entity e) {
+        if (e instanceof Tile) {
+            return true;
+        };
         return false;
     }
 

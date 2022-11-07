@@ -1,11 +1,10 @@
-package uet.oop.bomberman.graphics;
+package uet.oop.bomberman;
 
 public class Board {
     public static char[][] cell;
-    public static final char wall = '#';
-    public static final char brick = '*';
+    public static final char wall = 'w';
+    public static final char brick = 'g';
     public static final char enemy = '0';
-
     public static final char bomb = 'b';
 
     public static final char flame = 'f';

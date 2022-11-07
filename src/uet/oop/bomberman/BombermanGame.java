@@ -2,7 +2,6 @@ package uet.oop.bomberman;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -14,10 +13,10 @@ import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.characters.Bomber;
 import uet.oop.bomberman.entities.characters.enemies.Balloon;
+import uet.oop.bomberman.entities.characters.enemies.Enemy;
 import uet.oop.bomberman.entities.characters.enemies.Oneal;
 import uet.oop.bomberman.entities.items.*;
 
-import uet.oop.bomberman.graphics.Board;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.*;
@@ -34,6 +33,7 @@ public class BombermanGame extends Application {
     private Canvas canvas;
     private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
+    private List<Enemy> enemies = new ArrayList<>();
 
     private Bomber bomberman = null;
 
@@ -92,20 +92,11 @@ public class BombermanGame extends Application {
                         bombRate --;
                     }
                 } else {
-                    bomberman.setDirection(event);
+                    bomberman.setInputDir(event);
                 }
 
             }
         });
-
-        /*if (!bomberman.isAlive()) {
-            for (int i = 0; i < entities.size(); i++) {
-                if (entities.get(i).equals(bomberman)) {
-                    entities.remove(i);
-                }
-            }
-            Platform.exit();
-        }*/
 
     }
 
@@ -208,6 +199,14 @@ public class BombermanGame extends Application {
                     }
                 }
                 break;
+            }
+        }
+
+        if (!bomberman.isAlive()) {
+            for (int i = 0; i < entities.size(); i++) {
+                if (entities.get(i).equals(bomberman)) {
+                    entities.remove(i);
+                }
             }
         }
 

@@ -10,6 +10,11 @@ public class Enemy extends Character {
     }
 
     @Override
+    public void calculateMove() {
+
+    }
+
+    @Override
     public void update() {
 
     }
