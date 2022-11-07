@@ -1,8 +1,7 @@
-package uet.oop.bomberman.entities.enemies;
+package uet.oop.bomberman.entities.characters.enemies;
 
 import javafx.scene.image.Image;
-import uet.oop.bomberman.entities.Character;
-import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.characters.Character;
 
 public class Enemy extends Character {
 

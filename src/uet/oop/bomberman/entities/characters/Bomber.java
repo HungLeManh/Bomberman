@@ -1,8 +1,11 @@
-package uet.oop.bomberman.entities;
+package uet.oop.bomberman.entities.characters;
 
 
+import com.sun.jmx.remote.internal.ArrayQueue;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
+import uet.oop.bomberman.entities.Bomb;
+import uet.oop.bomberman.entities.characters.Character;
 import uet.oop.bomberman.entities.items.Item;
 import uet.oop.bomberman.graphics.Board;
 import uet.oop.bomberman.graphics.Sprite;
@@ -25,7 +28,6 @@ public class Bomber extends Character {
     @Override
     public void update() {
         if (!alive) {
-
         }
 
         if (direction != null) {
@@ -42,7 +44,6 @@ public class Bomber extends Character {
         this.direction = direction;
     }
 
-
     public void move() {
         if (animate == 99999) {
             animate = 0;
@@ -53,7 +54,7 @@ public class Bomber extends Character {
                 if (y % Sprite.SCALED_SIZE != 0) {
                     y = getYUnit() * Sprite.SCALED_SIZE;
                 }
-                if (canMove(x + speed + 24, y)) {
+                if (canMove(x + 24, y)) {
                     x += speed;
                 }
                 img = Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2,
@@ -83,7 +84,7 @@ public class Bomber extends Character {
                 if (x % Sprite.SCALED_SIZE != 0) {
                     x = getXUnit() * Sprite.SCALED_SIZE;
                 }
-                if (canMove(x, y + speed + 32)) {
+                if (canMove(x, y + 32)) {
                     y += speed;
                 }
                 img = Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2,
@@ -95,7 +96,8 @@ public class Bomber extends Character {
     }
 
 
-    public void addBomb(Bomb bomb) {
+    public void placeBomb() {
+        Bomb bomb = new Bomb(getXUnit(), getYUnit(), Sprite.bomb.getFxImage());
         bombList.add(bomb);
     }
     public void die(int control) {

@@ -26,6 +26,9 @@ public abstract class Entity {
 
     public abstract void update();
 
+    /** Tra ve true neu co the di qua nhau. */
+    public abstract boolean collide(Entity e);
+
     public int getX() {
         return x;
     }

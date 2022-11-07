@@ -12,9 +12,9 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
-import uet.oop.bomberman.entities.enemies.Balloon;
-import uet.oop.bomberman.entities.enemies.Enemy;
-import uet.oop.bomberman.entities.enemies.Oneal;
+import uet.oop.bomberman.entities.characters.Bomber;
+import uet.oop.bomberman.entities.characters.enemies.Balloon;
+import uet.oop.bomberman.entities.characters.enemies.Oneal;
 import uet.oop.bomberman.entities.items.*;
 
 import uet.oop.bomberman.graphics.Board;
@@ -35,8 +35,13 @@ public class BombermanGame extends Application {
     private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
 
+    private Bomber bomberman = null;
+
     public static char[][] matrix;
     public Board board = null;
+
+    private int bombRate = 1;
+    private int flameRadius = 1;
 
     public static void main(String[] args) {
 
@@ -59,6 +64,7 @@ public class BombermanGame extends Application {
         Scene scene = new Scene(root);
 
         // Them scene vao stage
+        stage.setTitle("Bomberman Game");
         stage.setScene(scene);
         stage.show();
 
@@ -73,20 +79,18 @@ public class BombermanGame extends Application {
 
         createMap();
 
-        Enemy o = new Oneal(3, 1, Sprite.oneal_left1.getFxImage());
-        entities.add(o);
-        board.cell[1][3] = Board.enemy;
-
-        Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+        bomberman = new Bomber(1, 1, Sprite.player_down.getFxImage());
         entities.add(bomberman);
 
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if (Objects.equals(event.getCode().toString(), "SPACE")) {
-                    Bomb bomb = new Bomb(bomberman.getXUnit(), bomberman.getYUnit(), Sprite.bomb.getFxImage());
-                    entities.add(bomb);
-                    bomberman.addBomb(bomb);
+                    if (bombRate > 0) {
+                        bomberman.placeBomb();
+                        entities.add(bomberman.getBombList().get(bombRate-1));
+                        bombRate --;
+                    }
                 } else {
                     bomberman.setDirection(event);
                 }
@@ -94,14 +98,14 @@ public class BombermanGame extends Application {
             }
         });
 
-        if (!bomberman.isAlive()) {
+        /*if (!bomberman.isAlive()) {
             for (int i = 0; i < entities.size(); i++) {
                 if (entities.get(i).equals(bomberman)) {
                     entities.remove(i);
                 }
             }
             Platform.exit();
-        }
+        }*/
 
     }
 
@@ -179,6 +183,34 @@ public class BombermanGame extends Application {
 
     public void update() {
         entities.forEach(Entity::update);
+
+        if (!bomberman.getBombList().isEmpty()) {
+            Bomb bomb = bomberman.getBombList().get(0);
+            if (bomb.getTimeToExplode() == 0) {
+                entities.addAll(bomb.getFlameList());
+            }
+            if (bomb.isExploded()) {
+                entities.remove(bomb);
+                bomberman.getBombList().remove(bomb);
+                bombRate ++;
+            }
+        }
+
+        for (int i = 0; i < entities.size(); i++) {
+            if (entities.get(i) instanceof Flame) {
+                Flame f = (Flame) entities.get(i);
+                if (f.getShowTime() == 0) {
+                    while (entities.get(i) instanceof Flame) {
+                        entities.remove(i);
+                        if (i == entities.size()) {
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+
     }
 
     public void render() {
@@ -213,5 +245,17 @@ public class BombermanGame extends Application {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public int getBombRate() {
+        return bombRate;
+    }
+
+    public void setBombRate(int bombRate) {
+        this.bombRate = bombRate;
+    }
+
+    public int getFlameRadius() {
+        return flameRadius;
     }
 }
