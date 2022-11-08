@@ -194,15 +194,15 @@ public class Bomber extends Character {
 
     public void afterKill() {
         switch (killTime) {
-            case 75:
+            case 30:
                 img = spriteDead[0].getFxImage();
                 killTime--;
                 break;
-            case 50:
+            case 20:
                 img = spriteDead[1].getFxImage();
                 killTime--;
                 break;
-            case 25:
+            case 10:
                 img = spriteDead[2].getFxImage();
                 killTime--;
                 break;

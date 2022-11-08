@@ -5,6 +5,7 @@ import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.characters.Character;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.sound.Sound;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -45,6 +46,7 @@ public class Enemy extends Character {
         if (killTime == 0) {
             removed = true;
         }
+        Sound.play("AA126_11");
         img = spriteDead[0].getFxImage();
         killTime--;
     }

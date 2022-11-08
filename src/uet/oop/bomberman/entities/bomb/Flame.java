@@ -39,6 +39,7 @@ public class Flame extends Entity {
         }
         if (e instanceof Enemy) {
             ((Enemy)e).kill();
+
         }
         //if (e instanceof Brick) {
         //    ((Brick)e).destroy();
