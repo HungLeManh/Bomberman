@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bomb extends Entity {
-    private int timeToExplode = 90;
+    private int timeToExplode = 40;
     private boolean exploded = false;
     private List<Flame> flameList = new ArrayList<Flame>();
 

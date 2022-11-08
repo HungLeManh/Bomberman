@@ -10,7 +10,7 @@ import uet.oop.bomberman.entities.characters.Character;
 import uet.oop.bomberman.entities.characters.enemies.Enemy;
 
 public class Flame extends Entity {
-    private int showTime = 30;
+    private int showTime = 15;
 
     private Board board;
 
