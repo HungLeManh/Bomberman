@@ -156,25 +156,30 @@ public class Bomber extends Character {
         }
         if (e instanceof Enemy) {
             kill();
+            Sound.play("AA126_11");
             return false;
         }
         if (e instanceof Portal) {
             if (portalPass) {
                 Platform.exit();
+                Sound.play("CRYST_UP");
                 return false;
             }
         }
 
         if (e instanceof SpeedItem) {
             e.setRemoved(true);
+            Sound.play("Item");
             speedUp();
             itemList.add((Item) e);
         } else if (e instanceof BombItem) {
             e.setRemoved(true);
+            Sound.play("Item");
             BombermanGame.addBombRate();
             itemList.add((Item) e);
         } else if (e instanceof FlameItem) {
             e.setRemoved(true);
+            Sound.play("Item");
             Bomb.addFlameRadius();
             itemList.add((Item) e);
         }
