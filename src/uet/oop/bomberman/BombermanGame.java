@@ -21,6 +21,7 @@ import uet.oop.bomberman.entities.characters.enemies.Oneal;
 import uet.oop.bomberman.entities.items.*;
 
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.sound.Sound;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class BombermanGame extends Application {
     //private static int flameRadius = 1;
 
     public static void main(String[] args) {
+        Sound.play("soundtrack");
         Application.launch(BombermanGame.class);
     }
 
