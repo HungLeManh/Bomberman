@@ -6,12 +6,14 @@ import uet.oop.bomberman.entities.AnimatedEntity;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Tile;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.sound.Sound;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bomb extends AnimatedEntity {
-    private int timeToExplode = 90;
+    private int timeToExplode = 45;
+
     private boolean exploded = false;
     private List<Flame> flameList = new ArrayList<Flame>();
 
@@ -156,6 +158,7 @@ public class Bomb extends AnimatedEntity {
 
         exploded = true;
         removed = true;
+        Sound.play("BOM_11_M");
     }
 
     public int getTimeToExplode() {

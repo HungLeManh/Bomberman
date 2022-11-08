@@ -12,7 +12,7 @@ import uet.oop.bomberman.entities.characters.enemies.Enemy;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Flame extends AnimatedEntity {
-    private int showTime = 30;
+    private int showTime = 10;
 
     private Sprite[] exp = {};
 
@@ -49,6 +49,7 @@ public class Flame extends AnimatedEntity {
         }
         if (e instanceof Enemy) {
             ((Enemy)e).kill();
+
         }
         //if (e instanceof Brick) {
         //    ((Brick)e).destroy();

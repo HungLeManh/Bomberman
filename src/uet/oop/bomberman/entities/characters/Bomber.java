@@ -16,6 +16,7 @@ import uet.oop.bomberman.entities.items.Item;
 import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.items.SpeedItem;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.sound.Sound;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -36,7 +37,7 @@ public class Bomber extends Character {
                 Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2};
         spriteDead = new Sprite[]{Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3};
         speed = 16;
-        killTime = 75;
+        killTime = 60;
     }
 
     @Override
@@ -83,6 +84,7 @@ public class Bomber extends Character {
 
     public void move() {
         int ss = Sprite.SCALED_SIZE;
+        int time = 60;
         switch (direction) {
             case up:
                 if (x % ss != 0) {
@@ -92,7 +94,7 @@ public class Bomber extends Character {
                     y -= speed;
                 }
                 img = Sprite.movingSprite(spriteMove[0], spriteMove[1], spriteMove[2],
-                        animate, 3).getFxImage();
+                        animate, time).getFxImage();
                 break;
             case down:
                 if (x % ss != 0) {
@@ -102,7 +104,7 @@ public class Bomber extends Character {
                     y += speed;
                 }
                 img = Sprite.movingSprite(spriteMove[3], spriteMove[4], spriteMove[5],
-                        animate, 3).getFxImage();
+                        animate, time).getFxImage();
                 break;
             case left:
                 if (y % ss != 0) {
@@ -112,7 +114,7 @@ public class Bomber extends Character {
                     x -= speed;
                 }
                 img = Sprite.movingSprite(spriteMove[6], spriteMove[7], spriteMove[8],
-                        animate, 3).getFxImage();
+                        animate, time).getFxImage();
                 break;
             case right:
                 if (y % ss != 0) {
@@ -122,7 +124,7 @@ public class Bomber extends Character {
                     x += speed;
                 }
                 img = Sprite.movingSprite(spriteMove[9], spriteMove[10], spriteMove[11],
-                        animate, 3).getFxImage();
+                        animate, time).getFxImage();
                 break;
             default:
         }
@@ -131,6 +133,7 @@ public class Bomber extends Character {
     public void placeBomb() {
         Bomb bomb = new Bomb(getXUnit(), getYUnit(), Sprite.bomb.getFxImage(), board);
         bombList.add(bomb);
+        Sound.play("BOM_SET");
     }
 
     @Override
@@ -140,25 +143,30 @@ public class Bomber extends Character {
         }
         if (e instanceof Enemy) {
             kill();
+            Sound.play("AA126_11");
             return false;
         }
         if (e instanceof Portal) {
             if (portalPass) {
                 Platform.exit();
+                Sound.play("CRYST_UP");
                 return false;
             }
         }
 
         if (e instanceof SpeedItem) {
             e.setRemoved(true);
+            Sound.play("Item");
             speedUp();
             itemList.add((Item) e);
         } else if (e instanceof BombItem) {
             e.setRemoved(true);
+            Sound.play("Item");
             BombermanGame.addBombRate();
             itemList.add((Item) e);
         } else if (e instanceof FlameItem) {
             e.setRemoved(true);
+            Sound.play("Item");
             Bomb.addFlameRadius();
             itemList.add((Item) e);
         }
@@ -168,19 +176,20 @@ public class Bomber extends Character {
     @Override
     public void kill() {
         alive = false;
+        Sound.play("endgame3");
     }
 
     public void afterKill() {
         switch (killTime) {
-            case 75:
+            case 30:
                 img = spriteDead[0].getFxImage();
                 killTime--;
                 break;
-            case 50:
+            case 20:
                 img = spriteDead[1].getFxImage();
                 killTime--;
                 break;
-            case 25:
+            case 10:
                 img = spriteDead[2].getFxImage();
                 killTime--;
                 break;

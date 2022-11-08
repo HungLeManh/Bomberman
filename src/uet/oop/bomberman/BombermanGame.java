@@ -43,14 +43,14 @@ public class BombermanGame extends Application {
 
     private Bomber bomberman = null;
 
-    public char[][] matrix;/* = {
+    public char[][] matrix = {
             {'#', '#', '#', '#', '#', '#', '#'},
             {'#', 'p', ' ', '1', ' ', 's', '#'},
             {'#', ' ', '*', ' ', '#', '*', '#'},
             {'#', '2', '#', ' ', ' ', '*', '#'},
             {'#', 'x', ' ', '*', 'b', ' ', '#'},
             {'#', ' ', 'f', ' ', ' ', '2', '#'},
-            {'#', '#', '#', '#', '#', '#', '#'} };*/
+            {'#', '#', '#', '#', '#', '#', '#'} };
 
     private static int bombRate = 1;
     //private static int flameRadius = 1;
@@ -63,7 +63,7 @@ public class BombermanGame extends Application {
     @Override
     public void start(Stage stage) {
         //Doc file cau hinh
-        createMatrix();
+        //createMatrix();
         // Tao Canvas
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
