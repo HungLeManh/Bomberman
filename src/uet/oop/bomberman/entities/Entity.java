@@ -50,6 +50,10 @@ public abstract class Entity {
         return removed;
     }
 
+    public void setRemoved(boolean removed) {
+        this.removed = removed;
+    }
+
     public int getXUnit() {
         return (int) Math.round((double)x / Sprite.SCALED_SIZE);
     }

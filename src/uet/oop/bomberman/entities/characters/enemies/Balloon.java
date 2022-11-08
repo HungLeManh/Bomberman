@@ -21,14 +21,22 @@ public class Balloon extends Enemy {
 
     @Override
     public void update() {
+        if (alive) {
+            collide(board.getEntityAt(getXUnit(), getYUnit()));
 
+        } else {
+            afterKill();
+        }
+
+        /*
         LowAI lowAI = new LowAI();
         direction = lowAI.calculateDirection();
         int d = direction;
         if(canMove(getXUnit(), getYUnit())){
             for(int i=0; i< 10; i++){
-                move(32 - speed, 32);
+                move();
             }
-        }
+        }*/
     }
 }
+

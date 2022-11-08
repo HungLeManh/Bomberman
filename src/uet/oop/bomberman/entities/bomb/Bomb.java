@@ -15,8 +15,8 @@ public class Bomb extends Entity {
     private List<Flame> flameList = new ArrayList<Flame>();
 
     // Pham vi cua bom no 4 huong tren, duoi, trai, phai
-    private int[] scope = {1, 1, 1, 1};
-    private int radius = 1;
+    private int[] scope;
+    private static int radius = 1;
 
     private List<Flame> top = new ArrayList<>();
     private List<Flame> down = new ArrayList<>();
@@ -27,6 +27,7 @@ public class Bomb extends Entity {
     public Bomb(int x, int y, Image img, Board board) {
         super( x, y, img);
         this.board = board;
+        scope = new int[]{radius, radius, radius, radius};
     }
 
     @Override
@@ -144,5 +145,9 @@ public class Bomb extends Entity {
 
     public boolean isExploded() {
         return exploded;
+    }
+
+    public static void addFlameRadius() {
+        radius++;
     }
 }

@@ -27,6 +27,7 @@ public class LayeredEntity extends Entity {
     public void update() {
         if (topEntity().removed) {
             entityList.removeLast();
+            System.out.println(topEntity());
         }
         topEntity().update();
     }
@@ -37,9 +38,9 @@ public class LayeredEntity extends Entity {
             Brick br = (Brick) topEntity();
             if (br.isDestroyed()) {
                 entityList.getFirst().render(gc);
-               /* if (entityList.size() > 2) {
+                //if (entityList.size() > 2) {
                     entityList.get(1).render(gc);
-                }*/
+                //}
             }
             br.render(gc);
         } else {

@@ -26,7 +26,9 @@ public class Board {
         for (int i = entities.size() - 1; i >= 0; i--) {
             Entity e = entities.get(i);
             if (e.getXUnit() == xUnit && e.getYUnit() == yUnit) {
-                if (e instanceof LayeredEntity) {
+                if (e instanceof Bomber) {
+                    continue;
+                } else if (e instanceof LayeredEntity) {
                     return ((LayeredEntity) e).topEntity();
                 }
                 return e;

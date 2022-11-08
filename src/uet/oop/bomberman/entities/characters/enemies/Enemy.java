@@ -12,18 +12,25 @@ public class Enemy extends Character {
 
     public Enemy(int x, int y, Image img, Board board) {
         super( x, y, img, board);
+        killTime = 60;
     }
 
-    @Override
-    public void calculateMove() {
-        if (animate % 50 == 0) {
-            direction = ThreadLocalRandom.current().nextInt(0, 3);
-            speed = ThreadLocalRandom.current().nextInt(4, 28);
+    public void update() {
+        if (alive) {
+            collide(board.getEntityAt(getXUnit(), getYUnit()));
+            calculateMove();
+            move();
+        } else {
+            afterKill();
         }
     }
 
     @Override
-    public void update() {
+    public void calculateMove() {
+        /*if (animate % 50 == 0) {
+            direction = ThreadLocalRandom.current().nextInt(0, 3);
+            speed = ThreadLocalRandom.current().nextInt(4, 28);
+        }*/
     }
 
     @Override
@@ -32,5 +39,13 @@ public class Enemy extends Character {
             return true;
         }
         return super.collide(e);
+    }
+
+    public void afterKill() {
+        if (killTime == 0) {
+            removed = true;
+        }
+        img = spriteDead[0].getFxImage();
+        killTime--;
     }
 }

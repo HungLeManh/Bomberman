@@ -24,13 +24,14 @@ import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 public class BombermanGame extends Application {
     
-    public static int WIDTH;
-    public static int HEIGHT;
+    public static int WIDTH = 7; ///cho nhanh
+    public static int HEIGHT = 7; //cho nhanh
     
     private GraphicsContext gc;
     private Canvas canvas;
@@ -40,11 +41,18 @@ public class BombermanGame extends Application {
 
     private Bomber bomberman = null;
 
-    public static char[][] matrix;
+    public static char[][] matrix = {
+            {'#', '#', '#', '#', '#', '#', '#'},
+            {'#', 'p', ' ', '1', ' ', 's', '#'},
+            {'#', ' ', '*', ' ', '#', '*', '#'},
+            {'#', '2', '#', ' ', ' ', '*', '#'},
+            {'#', 'x', ' ', '*', 'b', ' ', '#'},
+            {'#', ' ', 'f', ' ', ' ', '2', '#'},
+            {'#', '#', '#', '#', '#', '#', '#'} };
     public Board board = null;
 
-    private int bombRate = 1;
-    private int flameRadius = 1;
+    private static int bombRate = 1;
+    //private static int flameRadius = 1;
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -53,7 +61,7 @@ public class BombermanGame extends Application {
     @Override
     public void start(Stage stage) {
         //Doc file cau hinh
-        createMatrix();
+        //createMatrix();
         // Tao Canvas
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
@@ -81,13 +89,15 @@ public class BombermanGame extends Application {
 
         createMap();
 
+        entities.add(bomberman);
+
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if (Objects.equals(event.getCode().toString(), "SPACE")) {
                     if (bombRate > 0) {
                         bomberman.placeBomb();
-                        entities.add(bomberman.getBombList().get(bombRate-1));
+                        entities.add(((LinkedList<Bomb>)bomberman.getBombList()).getLast());
                         bombRate --;
                     }
                 } else {
@@ -117,6 +127,7 @@ public class BombermanGame extends Application {
                         entities.add(object);
                         break;
                     case 'x':
+                        //object = new Portal(j, i, Sprite.portal.getFxImage());
                         object = new LayeredEntity (j, i, new Grass(j, i, grassImg),
                                 new Portal(j, i, Sprite.portal.getFxImage()), new Brick(j, i, brickImg, board));
                         entities.add(object);
@@ -125,14 +136,15 @@ public class BombermanGame extends Application {
                         stillObjects.add(new Grass(j, i, grassImg));
                         object = new Balloon(j, i, Sprite.balloon_left1.getFxImage(), board);
                         entities.add(object);
+                        enemies.add((Enemy) object);
                         break;
                     case '2':
                         stillObjects.add(new Grass(j, i, grassImg));
                         object = new Oneal(j, i, Sprite.oneal_left1.getFxImage(), board);
                         entities.add(object);
+                        enemies.add((Enemy) object);
                         break;
                     case 'b':
-
                         object = new LayeredEntity (j, i, new Grass(j, i, grassImg),
                                 new BombItem(j, i, Sprite.powerup_bombs.getFxImage()), new Brick(j, i, brickImg, board));
                         entities.add(object);
@@ -149,7 +161,6 @@ public class BombermanGame extends Application {
                         break;
                     case 'p':
                         bomberman = new Bomber(j, i, Sprite.player_right.getFxImage(), board);
-                        entities.add(bomberman);
                         stillObjects.add(new Grass(j, i, grassImg));
                         break;
                     default:
@@ -177,32 +188,21 @@ public class BombermanGame extends Application {
         }
 
         for (int i = 0; i < entities.size(); i++) {
-            /*if (entities.get(i) instanceof Flame) {
-                Flame f = (Flame) entities.get(i);
-                if (f.getShowTime() == 0) {
-                    while (entities.get(i) instanceof Flame) {
-                        entities.remove(i);
-                        if (i == entities.size()) {
-                            i--;
-                            break;
-                        }
-                    }
-                }
-            }*/
             if (entities.get(i).isRemoved()) {
                 entities.remove(i);
             }
 
         }
-
         /*if (!bomberman.isAlive()) {
-            for (int i = 0; i < entities.size(); i++) {
-                if (entities.get(i).equals(bomberman)) {
-                    entities.remove(i);
-                }
-            }
-        }*/
 
+        }*/
+        if (enemies.isEmpty() && bomberman.isAlive()) {
+            bomberman.setPortalPass(true);
+        } else for (int i = 0; i < enemies.size(); i++) {
+            if (enemies.get(i).isRemoved()) {
+                enemies.remove(i);
+            }
+        }
     }
 
     public void render() {
@@ -243,11 +243,15 @@ public class BombermanGame extends Application {
         return bombRate;
     }
 
-    public void setBombRate(int bombRate) {
-        this.bombRate = bombRate;
+    public static void addBombRate() {
+        BombermanGame.bombRate++;
     }
 
-    public int getFlameRadius() {
+    /*public int getFlameRadius() {
         return flameRadius;
     }
+
+    public static void addFlameRadius() {
+        BombermanGame.flameRadius++;
+    }*/
 }

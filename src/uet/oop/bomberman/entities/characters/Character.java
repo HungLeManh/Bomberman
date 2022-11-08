@@ -22,6 +22,8 @@ public abstract class Character extends Entity {
     protected int animate = 0;
     protected int direction;
 
+    protected int killTime;
+
     protected Board board;
 
     protected Sprite spriteMove[];
@@ -48,69 +50,20 @@ public abstract class Character extends Entity {
         return true;
     }
 
-    public void move(int rw, int rh) {
-            if (animate == 99999) {
-                animate = 0;
-            }
-            int ss = Sprite.SCALED_SIZE;
-            switch (direction) {
-                case up:
-                    if (x % ss != 0) {
-                        x = getXUnit() * ss;
-                    }
-                    if (canMove(getXUnit(), (y - speed) / ss)) {
-                        y -= speed;
-                    }
-                    img = Sprite.movingSprite(spriteMove[0], spriteMove[1], spriteMove[2],
-                            animate++, 3).getFxImage();
-                    break;
-                case down:
-                    if (x % ss != 0) {
-                        x = getXUnit() * ss;
-                    }
-                    if (canMove(getXUnit(), (y + rh) / ss)) {
-                        y += speed;
-                    }
-                    img = Sprite.movingSprite(spriteMove[3], spriteMove[4], spriteMove[5],
-                            animate++, 3).getFxImage();
-                    break;
-                case left:
-                    if (y % ss != 0) {
-                        y = getYUnit() * ss;
-                    }
-                    if (canMove((x - speed) / ss, getYUnit())) {
-                        x -= speed;
-                    }
-                    img = Sprite.movingSprite(spriteMove[6], spriteMove[7], spriteMove[8],
-                            animate++, 3).getFxImage();
-                    break;
-                case right:
-                    if (y % ss != 0) {
-                        y = getYUnit() * ss;
-                    }
-                    if (canMove((x + rw) / ss, getYUnit())) {
-                        x += speed;
-                    }
-                    img = Sprite.movingSprite(spriteMove[9], spriteMove[10], spriteMove[11],
-                            animate++, 3).getFxImage();
-                    break;
-                default:
-            }
-        }
-
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
-
-    public boolean isAlive() {
-        return alive;
+    public void move() {
     }
 
     public void kill() {
+        alive = false;
     }
+
+    public void afterKill() {}
 
     @Override
     public boolean collide(Entity e) {
+        if (e instanceof Character) {
+            return false;
+        }
         if (e instanceof Flame) {
             this.kill();
             return false;
@@ -119,5 +72,13 @@ public abstract class Character extends Entity {
             return true;
         }
         return e.collide(this);
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
+    public boolean isAlive() {
+        return alive;
     }
 }

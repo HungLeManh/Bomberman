@@ -14,8 +14,5 @@ public class Oneal extends Enemy {
         spriteDead = new Sprite[]{Sprite.oneal_dead};
     }
 
-    @Override
-    public void update() {
 
-    }
 }

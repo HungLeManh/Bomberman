@@ -6,7 +6,7 @@ import uet.oop.bomberman.entities.bomb.Flame;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Brick extends Entity implements Tile {
-    private int time = 75;
+    private int time = 45;
     private boolean destroyed = false;
 
     private Board board;
@@ -31,15 +31,15 @@ public class Brick extends Entity implements Tile {
 
     public void destroy() {
         switch (time) {
-            case 75:
+            case 45:
                 img = desBrick[0].getFxImage();
                 time--;
                 break;
-            case 50:
+            case 30:
                 img = desBrick[1].getFxImage();
                 time--;
                 break;
-            case 25:
+            case 15:
                 img = desBrick[2].getFxImage();
                 time--;
                 break;
