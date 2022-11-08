@@ -2,6 +2,7 @@ package uet.oop.bomberman.entities.characters;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.Board;
+import uet.oop.bomberman.entities.AnimatedEntity;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Tile;
 import uet.oop.bomberman.entities.bomb.Bomb;
@@ -12,14 +13,13 @@ import uet.oop.bomberman.graphics.Sprite;
   Bomber va Enemy
  */
 
-public abstract class Character extends Entity {
+public abstract class Character extends AnimatedEntity {
     protected final int up = 0;
     protected final int down = 1;
     protected final int left = 2;
     protected final int right = 3;
     protected boolean alive = true;
     protected int speed;
-    protected int animate = 0;
     protected int direction;
 
     protected int killTime;

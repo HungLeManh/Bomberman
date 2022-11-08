@@ -10,6 +10,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.bomb.Bomb;
@@ -42,15 +43,14 @@ public class BombermanGame extends Application {
 
     private Bomber bomberman = null;
 
-    public static char[][] matrix = {
+    public char[][] matrix;/* = {
             {'#', '#', '#', '#', '#', '#', '#'},
             {'#', 'p', ' ', '1', ' ', 's', '#'},
             {'#', ' ', '*', ' ', '#', '*', '#'},
             {'#', '2', '#', ' ', ' ', '*', '#'},
             {'#', 'x', ' ', '*', 'b', ' ', '#'},
             {'#', ' ', 'f', ' ', ' ', '2', '#'},
-            {'#', '#', '#', '#', '#', '#', '#'} };
-    public Board board = null;
+            {'#', '#', '#', '#', '#', '#', '#'} };*/
 
     private static int bombRate = 1;
     //private static int flameRadius = 1;
@@ -63,7 +63,7 @@ public class BombermanGame extends Application {
     @Override
     public void start(Stage stage) {
         //Doc file cau hinh
-        //createMatrix();
+        createMatrix();
         // Tao Canvas
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
@@ -112,7 +112,7 @@ public class BombermanGame extends Application {
     }
 
     public void createMap() {
-        board = new Board(entities, stillObjects);
+        Board board = new Board(entities, stillObjects);
         for (int i = 0; i < HEIGHT; i++) {
             for (int j = 0; j < WIDTH; j++) {
                 Entity object;
@@ -129,7 +129,6 @@ public class BombermanGame extends Application {
                         entities.add(object);
                         break;
                     case 'x':
-                        //object = new Portal(j, i, Sprite.portal.getFxImage());
                         object = new LayeredEntity (j, i, new Grass(j, i, grassImg),
                                 new Portal(j, i, Sprite.portal.getFxImage()), new Brick(j, i, brickImg, board));
                         entities.add(object);
@@ -213,7 +212,7 @@ public class BombermanGame extends Application {
         entities.forEach(g -> g.render(gc));
     }
 
-    public static void createMatrix() {
+    public void createMatrix() {
         BufferedReader buffered = null;
         try {
             Reader in = new FileReader("res/levels/Level1.txt");

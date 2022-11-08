@@ -26,9 +26,6 @@ public class Bomber extends Character {
     private List<Bomb> bombList = new LinkedList<Bomb>();
     private List<Item> itemList = new ArrayList<Item>();
     private KeyEvent inputDir = null;
-    private int animate = 0;
-    private boolean bombPass = false;
-
     private boolean portalPass = false;
 
     public Bomber(int x, int y, Image img, Board board) {
@@ -44,9 +41,9 @@ public class Bomber extends Character {
 
     @Override
     public void update() {
+        animate();
         if (alive) {
             collide(board.getOtherEntityAt(this));
-
             if (inputDir != null) {
                 calculateMove();
                 move();
@@ -60,9 +57,6 @@ public class Bomber extends Character {
     }
 
     public void calculateMove() {
-        if (animate == 99999) {
-            animate = 0;
-        }
         switch (inputDir.getCode().toString()) {
             case "RIGHT":
                 direction = right;
@@ -84,17 +78,10 @@ public class Bomber extends Character {
     }
 
     public boolean canMove(int xUnit, int yUnit) {
-        if (bombPass) {
-            bombPass = false;
-            return true;
-        }
         return super.canMove(xUnit, yUnit);
     }
 
     public void move() {
-        if (animate == 99999) {
-            animate = 0;
-        }
         int ss = Sprite.SCALED_SIZE;
         switch (direction) {
             case up:
@@ -105,7 +92,7 @@ public class Bomber extends Character {
                     y -= speed;
                 }
                 img = Sprite.movingSprite(spriteMove[0], spriteMove[1], spriteMove[2],
-                        animate++, 3).getFxImage();
+                        animate, 3).getFxImage();
                 break;
             case down:
                 if (x % ss != 0) {
@@ -115,7 +102,7 @@ public class Bomber extends Character {
                     y += speed;
                 }
                 img = Sprite.movingSprite(spriteMove[3], spriteMove[4], spriteMove[5],
-                        animate++, 3).getFxImage();
+                        animate, 3).getFxImage();
                 break;
             case left:
                 if (y % ss != 0) {
@@ -125,7 +112,7 @@ public class Bomber extends Character {
                     x -= speed;
                 }
                 img = Sprite.movingSprite(spriteMove[6], spriteMove[7], spriteMove[8],
-                        animate++, 3).getFxImage();
+                        animate, 3).getFxImage();
                 break;
             case right:
                 if (y % ss != 0) {
@@ -135,7 +122,7 @@ public class Bomber extends Character {
                     x += speed;
                 }
                 img = Sprite.movingSprite(spriteMove[9], spriteMove[10], spriteMove[11],
-                        animate++, 3).getFxImage();
+                        animate, 3).getFxImage();
                 break;
             default:
         }
@@ -144,7 +131,6 @@ public class Bomber extends Character {
     public void placeBomb() {
         Bomb bomb = new Bomb(getXUnit(), getYUnit(), Sprite.bomb.getFxImage(), board);
         bombList.add(bomb);
-        bombPass = true;
     }
 
     @Override

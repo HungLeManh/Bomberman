@@ -27,7 +27,6 @@ public class LayeredEntity extends Entity {
     public void update() {
         if (topEntity().removed) {
             entityList.removeLast();
-            System.out.println(topEntity());
         }
         topEntity().update();
     }

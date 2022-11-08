@@ -16,6 +16,7 @@ public class Enemy extends Character {
     }
 
     public void update() {
+        animate();
         if (alive) {
             collide(board.getEntityAt(getXUnit(), getYUnit()));
             calculateMove();

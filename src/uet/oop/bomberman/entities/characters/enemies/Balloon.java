@@ -19,14 +19,8 @@ public class Balloon extends Enemy {
         speed = 1;
     }
 
-    @Override
+    /*@Override
     public void update() {
-        if (alive) {
-            collide(board.getEntityAt(getXUnit(), getYUnit()));
-
-        } else {
-            afterKill();
-        }
 
         /*
         LowAI lowAI = new LowAI();
@@ -36,7 +30,17 @@ public class Balloon extends Enemy {
             for(int i=0; i< 10; i++){
                 move();
             }
-        }*/
+        }
+    }*/
+
+    public void calculateMove() {
+        direction = 2;
     }
+
+    public void move() {
+        img = Sprite.movingSprite(spriteMove[0], spriteMove[1], spriteMove[2], animate, 60).getFxImage();
+    }
+
+
 }
 
