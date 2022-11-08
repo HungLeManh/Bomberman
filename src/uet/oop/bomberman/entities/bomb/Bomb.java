@@ -5,6 +5,7 @@ import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Tile;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.sound.Sound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,6 +134,7 @@ public class Bomb extends Entity {
 
         exploded = true;
         removed = true;
+        Sound.play("BOM_11_M");
     }
 
     public int getTimeToExplode() {

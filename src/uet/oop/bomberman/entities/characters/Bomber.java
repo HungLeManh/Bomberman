@@ -16,6 +16,7 @@ import uet.oop.bomberman.entities.items.Item;
 import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.items.SpeedItem;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.sound.Sound;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -144,6 +145,7 @@ public class Bomber extends Character {
     public void placeBomb() {
         Bomb bomb = new Bomb(getXUnit(), getYUnit(), Sprite.bomb.getFxImage(), board);
         bombList.add(bomb);
+        Sound.play("BOM_SET");
         bombPass = true;
     }
 
@@ -182,6 +184,7 @@ public class Bomber extends Character {
     @Override
     public void kill() {
         alive = false;
+        Sound.play("endgame3");
     }
 
     public void afterKill() {
