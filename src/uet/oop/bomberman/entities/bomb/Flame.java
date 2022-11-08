@@ -23,7 +23,7 @@ public class Flame extends Entity {
     public void update() {
         if (showTime > 0) {
             showTime --;
-            collide(board.getEntityAt(getXUnit(), getYUnit()));
+            //collide(board.getEntityAt(getXUnit(), getYUnit()));
         } else {
             removed = true;
         }

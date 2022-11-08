@@ -45,7 +45,7 @@ public class Bomber extends Character {
     @Override
     public void update() {
         if (alive) {
-            collide(board.getEntityAt(getXUnit(), getYUnit()));
+            collide(board.getOtherEntityAt(this));
 
             if (inputDir != null) {
                 calculateMove();
@@ -76,9 +76,9 @@ public class Bomber extends Character {
             case "DOWN":
                 direction = down;
                 break;
-            /*case "X":
-                System.out.println(board.getEntityAt(getXUnit(), getYUnit()));
-                break;*/
+            case "X":
+                System.out.println(board.getOtherEntityAt(this));
+                break;
             default:
         }
     }

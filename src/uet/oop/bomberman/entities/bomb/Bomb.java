@@ -32,6 +32,7 @@ public class Bomb extends Entity {
 
     @Override
     public void update() {
+        collide(board.getOtherEntityAt(this));
         if (timeToExplode == 0) {
             explode();
         } else {
@@ -41,7 +42,11 @@ public class Bomb extends Entity {
 
     @Override
     public boolean collide(Entity e) {
-        return false;
+        if (e instanceof Flame) {
+            timeToExplode = 0;
+            return false;
+        }
+        return true;
     }
 
     public void calculatedScope() {

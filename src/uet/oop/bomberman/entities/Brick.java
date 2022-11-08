@@ -21,7 +21,7 @@ public class Brick extends Entity implements Tile {
     public void update() {
         if (!destroyed) {
             board.stillObject.add(new Grass(getXUnit(), getYUnit(), Sprite.grass.getFxImage()));
-            collide(board.getEntityAt(getXUnit(), getYUnit()));
+            collide(board.getOtherEntityAt(this));
         } else if (time > 0) {
             destroy();
         } else {

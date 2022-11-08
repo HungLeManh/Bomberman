@@ -26,9 +26,7 @@ public class Board {
         for (int i = entities.size() - 1; i >= 0; i--) {
             Entity e = entities.get(i);
             if (e.getXUnit() == xUnit && e.getYUnit() == yUnit) {
-                if (e instanceof Bomber) {
-                    continue;
-                } else if (e instanceof LayeredEntity) {
+                if (e instanceof LayeredEntity) {
                     return ((LayeredEntity) e).topEntity();
                 }
                 return e;
@@ -38,6 +36,28 @@ public class Board {
             Entity e = stillObject.get(i);
             if (e.getXUnit() == xUnit && e.getYUnit() == yUnit) {
                 return e;
+            }
+        }
+        return null;
+    }
+
+    public Entity getOtherEntityAt(Entity e) {
+        for (int i = entities.size() - 1; i >= 0; i--) {
+            Entity other = entities.get(i);
+            if (other.getXUnit() == e.getXUnit() && other.getYUnit() == e.getYUnit()) {
+                if (other.equals(e)) {
+                    continue;
+                } else if (other instanceof LayeredEntity) {
+                        return ((LayeredEntity) other).topEntity();
+                    }
+                return other;
+            }
+            }
+
+        for (int i = stillObject.size() - 1; i >= 0; i--) {
+            Entity other = stillObject.get(i);
+            if (other.getXUnit() == e.getXUnit() && other.getYUnit() == e.getYUnit()) {
+                return other;
             }
         }
         return null;
