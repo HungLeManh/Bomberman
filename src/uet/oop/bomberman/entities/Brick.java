@@ -6,7 +6,7 @@ import uet.oop.bomberman.entities.bomb.Flame;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Brick extends Entity implements Tile {
-    private int time = 45;
+    private int time = 15;
     private boolean destroyed = false;
 
     private Board board;

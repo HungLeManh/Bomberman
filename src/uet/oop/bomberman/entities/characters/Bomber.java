@@ -40,7 +40,7 @@ public class Bomber extends Character {
                 Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2};
         spriteDead = new Sprite[]{Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3};
         speed = 16;
-        killTime = 75;
+        killTime = 60;
     }
 
     @Override

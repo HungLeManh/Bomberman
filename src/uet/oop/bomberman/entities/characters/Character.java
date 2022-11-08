@@ -51,6 +51,53 @@ public abstract class Character extends Entity {
     }
 
     public void move() {
+        if (animate == 99999) {
+            animate = 0;
+        }
+        int ss = Sprite.SCALED_SIZE;
+        switch (direction) {
+            case up:
+                if (x % ss != 0) {
+                    x = getXUnit() * ss;
+                }
+                if (canMove(getXUnit(), (y - speed) / ss)) {
+                    y -= speed;
+                }
+                img = Sprite.movingSprite(spriteMove[0], spriteMove[1], spriteMove[2],
+                        animate++, 60).getFxImage();
+                break;
+            case down:
+                if (x % ss != 0) {
+                    x = getXUnit() * ss;
+                }
+                if (canMove(getXUnit(), (y + ss) / ss)) {
+                    y += speed;
+                }
+                img = Sprite.movingSprite(spriteMove[3], spriteMove[4], spriteMove[5],
+                        animate++, 60).getFxImage();
+                break;
+            case left:
+                if (y % ss != 0) {
+                    y = getYUnit() * ss;
+                }
+                if (canMove((x - speed) / ss, getYUnit())) {
+                    x -= speed;
+                }
+                img = Sprite.movingSprite(spriteMove[6], spriteMove[7], spriteMove[8],
+                        animate++, 60).getFxImage();
+                break;
+            case right:
+                if (y % ss != 0) {
+                    y = getYUnit() * ss;
+                }
+                if (canMove((x + ss) / ss, getYUnit())) {
+                    x += speed;
+                }
+                img = Sprite.movingSprite(spriteMove[9], spriteMove[10], spriteMove[11],
+                        animate++, 60).getFxImage();
+                break;
+            default:
+        }
     }
 
     public void kill() {
