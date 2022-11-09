@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bomb extends AnimatedEntity {
-    private int timeToExplode = 45;
+    private int timeToExplode = 50;
 
     private boolean exploded = false;
     private List<Flame> flameList = new ArrayList<Flame>();
@@ -155,6 +155,7 @@ public class Bomb extends AnimatedEntity {
         flameList.addAll(down);
         flameList.addAll(left);
         flameList.addAll(right);
+        board.entities.addAll(flameList);
 
         exploded = true;
         removed = true;

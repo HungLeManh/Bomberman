@@ -1,5 +1,6 @@
 package uet.oop.bomberman;
 
+import javafx.application.Platform;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.LayeredEntity;
 import uet.oop.bomberman.entities.characters.Bomber;
@@ -61,5 +62,9 @@ public class Board {
             }
         }
         return null;
+    }
+
+    public void nextLevel() {
+        Platform.exit();
     }
 }

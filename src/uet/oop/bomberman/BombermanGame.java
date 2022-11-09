@@ -11,6 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.bomb.Bomb;
@@ -45,8 +46,8 @@ public class BombermanGame extends Application {
 
     public char[][] matrix = {
             {'#', '#', '#', '#', '#', '#', '#'},
-            {'#', 'p', ' ', '1', ' ', 's', '#'},
-            {'#', ' ', '*', ' ', '#', '*', '#'},
+            {'#', 'p', ' ', ' ', 's', '1', '#'},
+            {'#', '*', '*', ' ', '#', '*', '#'},
             {'#', '2', '#', ' ', ' ', '*', '#'},
             {'#', 'x', ' ', '*', 'b', ' ', '#'},
             {'#', ' ', 'f', ' ', ' ', '2', '#'},
@@ -63,10 +64,11 @@ public class BombermanGame extends Application {
     @Override
     public void start(Stage stage) {
         //Doc file cau hinh
-        //createMatrix();
+        createMatrix();
         // Tao Canvas
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
+
 
         // Tao root container
         Group root = new Group();
@@ -173,20 +175,9 @@ public class BombermanGame extends Application {
     }
 
     public void update() {
-        entities.forEach(Entity::update);
-
-        if (!bomberman.getBombList().isEmpty()) {
-            Bomb bomb = bomberman.getBombList().get(0);
-            if (bomb.getTimeToExplode() == 0) {
-                entities.addAll(bomb.getFlameList());
+        for (int i = 0; i < entities.size(); i++) {
+                entities.get(i).update();
             }
-
-            if (bomb.isExploded()) {
-                entities.remove(bomb);
-                bomberman.getBombList().remove(bomb);
-                bombRate ++;
-            }
-        }
 
         for (int i = 0; i < entities.size(); i++) {
             if (entities.get(i).isRemoved()) {
@@ -194,9 +185,9 @@ public class BombermanGame extends Application {
             }
 
         }
-        /*if (!bomberman.isAlive()) {
-
-        }*/
+        if (!bomberman.isAlive()) {
+            gameOver();
+        }
         if (enemies.isEmpty() && bomberman.isAlive()) {
             bomberman.setPortalPass(true);
         } else for (int i = 0; i < enemies.size(); i++) {
@@ -204,6 +195,10 @@ public class BombermanGame extends Application {
                 enemies.remove(i);
             }
         }
+    }
+
+    private void gameOver() {
+        Platform.exit();
     }
 
     public void render() {

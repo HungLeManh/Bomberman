@@ -50,6 +50,7 @@ public class Bomber extends Character {
                 move();
                 inputDir = null;
             }
+            clearBomb();
         } else if (killTime > 0) {
             afterKill();
         } else {
@@ -136,6 +137,17 @@ public class Bomber extends Character {
         Sound.play("BOM_SET");
     }
 
+    public void clearBomb() {
+        if (!bombList.isEmpty()) {
+            Bomb b = bombList.get(0);
+            if (b.isRemoved()) {
+                bombList.remove(0);
+                board.entities.remove(b);
+                BombermanGame.addBombRate();
+            }
+        }
+    }
+
     @Override
     public boolean collide(Entity e) {
         if (e instanceof Bomber) {
@@ -148,7 +160,7 @@ public class Bomber extends Character {
         }
         if (e instanceof Portal) {
             if (portalPass) {
-                Platform.exit();
+                board.nextLevel();
                 Sound.play("CRYST_UP");
                 return false;
             }
