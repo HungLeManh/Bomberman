@@ -15,7 +15,7 @@ public class Oneal extends Enemy {
                                     Sprite.oneal_left1, Sprite.oneal_left2, Sprite.oneal_left3,
                                     Sprite.oneal_right1, Sprite.oneal_right2, Sprite.oneal_right3};
         spriteDead = new Sprite[]{Sprite.oneal_dead};
-        speed = 8;
+        speed = 1;
         LowAI lowAI = new LowAI();
         direction = lowAI.calculateDirection();
         killTime = 20;
@@ -25,7 +25,7 @@ public class Oneal extends Enemy {
         if (alive) {
             collide(board.getEntityAt(getXUnit(), getYUnit()));
 
-            if(k == 97){
+            if(k == 65){
                 k = 0;
             }
             if(direction == 0){
@@ -34,11 +34,23 @@ public class Oneal extends Enemy {
             if(direction == 1){
                 direction = 3;
             }
+
+            while (!check()){
+                LowAI lowAI = new LowAI();
+                direction = lowAI.calculateDirection();
+                if(direction == 0){
+                    direction = 2;
+                }
+                if(direction == 1){
+                    direction = 3;
+                }
+            }
+
             int d = direction;
 
             LowAI lowAI = new LowAI();
             direction = lowAI.calculateDirection();
-            if(direction != d && k < 96){
+            if(direction != d && k < 64){
                 direction = d;
             }
 
@@ -51,6 +63,18 @@ public class Oneal extends Enemy {
             afterKill();
         }
 
+    }
+
+    public boolean check(){
+        int ss =  Sprite.SCALED_SIZE;
+        boolean k =true;
+        if(direction == 2 && !canMove((x - speed) / ss, getYUnit())){
+            k = false;
+        }
+        if(direction == 3 && !canMove((x + ss) / ss, getYUnit())){
+            k = false;
+        }
+        return k;
     }
 
 }

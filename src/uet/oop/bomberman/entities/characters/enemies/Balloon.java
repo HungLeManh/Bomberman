@@ -45,14 +45,17 @@ public class Balloon extends Enemy {
         /*if (alive) {
             collide(board.getEntityAt(getXUnit(), getYUnit()));
         */
-            if(k == 97){
+            if(k == 17){
                 k = 0;
             }
             int d = direction;
 
             LowAI lowAI = new LowAI();
             direction = lowAI.calculateDirection();
-            if(direction != d && k < 96){
+            while (!check()){
+                direction = lowAI.calculateDirection();
+            }
+            if(direction != d && k < 16){
                 direction = d;
             }
 
@@ -62,6 +65,24 @@ public class Balloon extends Enemy {
 
 
 
+    }
+
+    public boolean check(){
+        int ss =  Sprite.SCALED_SIZE;
+        boolean k =true;
+        if(direction == 0 && !canMove(getXUnit(), (y - speed) / ss)){
+            k = false;
+        }
+        if(direction == 1 && !canMove(getXUnit(), (y + ss) / ss)){
+            k = false;
+        }
+        if(direction == 2 && !canMove((x - speed) / ss, getYUnit())){
+            k = false;
+        }
+        if(direction == 3 && !canMove((x + ss) / ss, getYUnit())){
+            k = false;
+        }
+        return k;
     }
 
 
